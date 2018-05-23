@@ -31,15 +31,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-        lat = 15;
-        lng = 20;
+        lat = 21.504165;
+        lng = -104.894589;
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+        mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         Criteria criteria = new Criteria();
         provider = locationManager.getBestProvider(criteria, false);
+        mapFragment.getMapAsync(this);
     }
 
     /**
@@ -87,11 +87,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         lat=location.getLatitude();
         lng=location.getLongitude();
 
-        mapFragment.getMapAsync(this);
-
-        //txtLat.setText(String.valueOf(lat));
-        //txtLong.setText(String.valueOf(lng));
-        //txtSource.setText("Source = " + provider);
+        if(mMap!=null){
+            LatLng sydney = new LatLng(lat, lng);
+            mMap.addMarker(new MarkerOptions().position(sydney).title("Posición"));
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+            mapFragment.getMapAsync(this);
+        }
     }
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
